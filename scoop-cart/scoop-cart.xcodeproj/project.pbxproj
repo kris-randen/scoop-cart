@@ -21,6 +21,7 @@
 		EEBA01602B4C7F8D00A27D81 /* GroceryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBA015F2B4C7F8D00A27D81 /* GroceryListViewModel.swift */; };
 		EEBA01622B4C800000A27D81 /* GroceryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBA01612B4C800000A27D81 /* GroceryList.swift */; };
 		EEBA01642B4C810800A27D81 /* GroceryListStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBA01632B4C810800A27D81 /* GroceryListStorage.swift */; };
+		EEBA01662B4C85BB00A27D81 /* GroceryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBA01652B4C85BB00A27D81 /* GroceryListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		EEBA015F2B4C7F8D00A27D81 /* GroceryListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryListViewModel.swift; sourceTree = "<group>"; };
 		EEBA01612B4C800000A27D81 /* GroceryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryList.swift; sourceTree = "<group>"; };
 		EEBA01632B4C810800A27D81 /* GroceryListStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryListStorage.swift; sourceTree = "<group>"; };
+		EEBA01652B4C85BB00A27D81 /* GroceryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 		EEBA01552B4C7B7800A27D81 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EEBA01652B4C85BB00A27D81 /* GroceryListView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				EEBA012D2B4C7A9D00A27D81 /* ContentView.swift in Sources */,
 				EEBA012B2B4C7A9D00A27D81 /* scoop_cartApp.swift in Sources */,
 				EEBA01582B4C7C4700A27D81 /* Mass.swift in Sources */,
+				EEBA01662B4C85BB00A27D81 /* GroceryListView.swift in Sources */,
 				EEBA01622B4C800000A27D81 /* GroceryList.swift in Sources */,
 				EEBA01602B4C7F8D00A27D81 /* GroceryListViewModel.swift in Sources */,
 				EEBA015C2B4C7D1100A27D81 /* Quantity.swift in Sources */,
