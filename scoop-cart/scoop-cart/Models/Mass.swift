@@ -8,7 +8,7 @@
 import Foundation
 
 struct Mass: Codable {
-    enum Unit: String, Codable {
+    enum Unit: String, Codable, CaseIterable {
         case gm = "gm"
         case kg = "kg"
     }

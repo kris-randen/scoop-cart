@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GroceryListView: View {
     @StateObject var vm = GroceryListViewModel()
+    @State private var showingAddItemView = false
     
     var body: some View {
         NavigationView {
@@ -23,6 +24,9 @@ struct GroceryListView: View {
                 .onDelete(perform: deleteItems)
             }
             .navigationTitle("Grocery List")
+            .sheet(isPresented: $showingAddItemView) {
+                AddItemView(viewModel: vm)
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: add) {
@@ -39,6 +43,7 @@ struct GroceryListView: View {
     
     private func add() {
         /// Implementation for adding a new item
+        showingAddItemView = true
     }
 }
 

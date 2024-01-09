@@ -8,7 +8,7 @@
 import Foundation
 
 struct Volume: Codable {
-    enum Unit: String, Codable {
+    enum Unit: String, Codable, CaseIterable {
         case ml = "ml"
         case l = "l"
     }

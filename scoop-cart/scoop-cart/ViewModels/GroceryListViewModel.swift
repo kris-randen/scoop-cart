@@ -31,6 +31,13 @@ class GroceryListViewModel: ObservableObject {
         }
     }
     
+    func add(_ item: GroceryItem) {
+        Task {
+            await list.add(item)
+            load()
+        }
+    }
+    
     func remove(_ id: UUID) {
         Task {
             await list.remove(id)
