@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct GroceryListView: View {
-    @StateObject var vm = GroceryListViewModel()
+    @StateObject var gvm = GroceryListViewModel()
+    @StateObject var fvm = FoodItemsListViewModel()
     @State private var showingAddItemView = false
+    @State private var navigate = false
+    @State private var kind: Nutrient.Kind = .vitamin
+    @State private var serving: Serving.Kind = .kcal2000
+    
     
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font: UIFont(name: "Avenir Next Bold", size: 20)!, .foregroundColor: UIColor(Colors.scoopRed)]
@@ -19,7 +24,7 @@ struct GroceryListView: View {
         NavigationView {
             VStack {
                 List {
-                    ForEach(vm.items) { item in
+                    ForEach(gvm.items) { item in
                         GroceryListCellView(item: item.name, quantity: item.quantityDescription, unit: item.unitDescription)
                             .listRowInsets(EdgeInsets(top: -5, leading: 0, bottom: 0, trailing: 0))
                             .listRowBackground(Color.clear)
@@ -28,7 +33,7 @@ struct GroceryListView: View {
                 }
                 .navigationInlinify(title: Constants.NavigationTitle.groceryList)
                 .sheet(isPresented: $showingAddItemView) {
-                    AddGroceryItemView(vm: vm)
+                    AddGroceryItemView(vm: gvm)
                 }
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
@@ -44,17 +49,24 @@ struct GroceryListView: View {
                     }
                 }
                 Button {
-                    
+                    Task {
+                        fvm.profile = nil
+                        await fvm.fetchNutritionInfo(for: gvm.items[0].name)
+                        navigate = true
+                    }
                 } label: {
                     ScoopButtonLabelView()
                 }
+                if let profile = fvm.profile {
+                    NavigationLink("", destination: HorizontalChartView(kind: $kind, serving: $serving, profile: profile), isActive: $navigate)
+                }
             }
         }
-        .foregroundColor(Colors.scoopRed)
+        .accentColor(Colors.scoopRed)
     }
     
     private func deleteItems(at offsets: IndexSet) {
-        offsets.map {vm.items[$0].id}.forEach(vm.remove)
+        offsets.map {gvm.items[$0].id}.forEach(gvm.remove)
     }
     
     private func add() {
