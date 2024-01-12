@@ -7,123 +7,83 @@
 
 import SwiftUI
 
-//struct AddItemView: View {
-//    @Environment(\.presentationMode) var presentationMode
-//    @ObservedObject var vm: GroceryListViewModel
-//    @State private var name: String = ""
-//    @State private var quantityType: Quantity.QuantityType = .mass
-//    @State private var value: Double = 0
-//    @State private var massUnit: Mass.Unit = .gm
-//    @State private var volUnit: Volume.Unit = .ml
-//
-//    var body: some View {
-//        NavigationView {
-//            Form {
-//                Section(header: Text("Item Name")) {
-//                    TextField("Enter item name", text: $name)
-//                }
-//                Section(header: Text("Quantity")) {
-//                    Picker("Type", selection: $quantityType) {
-//                        Text("Mass").tag(Quantity.QuantityType.mass)
-//                        Text("Volume").tag(Quantity.QuantityType.volume)
-//                    }
-//                    .pickerStyle(SegmentedPickerStyle())
-//
-//                    TextField("Enter quantity", value: $value, format: .number)
-//
-//                    if quantityType == .mass {
-//                        Picker("Unit", selection: $massUnit) {
-//                            ForEach(Mass.Unit.allCases, id: \.self) { unit in
-//                                Text(unit.rawValue).tag(unit)
-//                            }
-//                        }
-//                    } else {
-//                        Picker("Unit", selection: $volUnit) {
-//                            ForEach(Volume.Unit.allCases, id: \.self) { unit in
-//                                Text(unit.rawValue).tag(unit)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            .navigationTitle("Add New Item")
-//            .toolbar {
-//                ToolbarItem(placement: .topBarLeading) {
-//                    Button("Cancel") {
-//                        presentationMode.wrappedValue.dismiss()
-//                    }
-//                }
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    Button("Save") {
-//                        save()
-//                        presentationMode.wrappedValue.dismiss()
-//                    }
-//                }
-//                .disabled(name.isEmpty || value <= 0)
-//            }
-//        }
-//    }
-//
-//    private func save() {
-//        let quantity: Quantity = quantityType == .mass ? .mass(Mass(value: value, unit: massUnit)) : .volume(Volume(value: value, unit: volUnit))
-//
-//        let item = GroceryItem(name: name, quantity: quantity)
-//        vm.add(item)
-//    }
-//}
-
-//#Preview {
-//    AddItemView()
-//}
-
 struct AddItemView: View {
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel: GroceryListViewModel
+    @ObservedObject var vm = GroceryListViewModel()
     @State private var itemName: String = ""
-    @State private var selectedQuantityType: Quantity.QuantityType = .mass
-    @State private var quantityValue: Double = 0
-    @State private var selectedMassUnit: Mass.Unit = .gm
-    @State private var selectedVolumeUnit: Volume.Unit = .ml
+    @State private var quantityType: Quantity.Kind = .mass
+    @State private var value: Double = 0
+    @State private var massUnit: Mass.Unit = .gm
+    @State private var volumeUnit: Volume.Unit = .ml
+    
+    init() {
+        UINavigationBar.appearance().titleTextAttributes = [.font: UIFont(name: "Avenir Next Bold", size: 20)!, .foregroundColor: UIColor(Colors.scoopRed)]
+    }
+    
+    init(vm: GroceryListViewModel) {
+        self.init()
+        self.vm = vm
+    }
     
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Item Name")) {
-                    TextField("Enter item name", text: $itemName)
+                Section(header: Text("Item Name".camelCased).font(Fonts.halfWidthButtonLabel)) {
+                    TextField(text: $itemName) {
+                        Text("Enter item name")
+                    }
+                    
+                    .font(Fonts.signInTextField)
+                    .borderify(shape: Shapes.textField, color: Colors.scoopYellow)
+                    .clippify(shape: Shapes.textField)
+                    .shadowify()
                 }
                 Section(header: Text("Quantity")) {
-                    Picker("Type", selection: $selectedQuantityType) {
-                        Text("Mass").tag(Quantity.QuantityType.mass)
-                        Text("Volume").tag(Quantity.QuantityType.volume)
-                    }.pickerStyle(SegmentedPickerStyle())
+                    Picker("Type", selection: $quantityType) {
+                        Text("Mass")
+                            .tag(Quantity.Kind.mass)
+                        Text("Volume")
+                            .tag(Quantity.Kind.volume)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
                     
-                    TextField("Enter quantity", value: $quantityValue, format: .number)
+                    TextField("Enter quantity", value: $value, format: .number)
                     
-                    QuantityPickerView(quantityType: $selectedQuantityType, selectedMassUnit: $selectedMassUnit, selectedVolumeUnit: $selectedVolumeUnit)
+                    QuantityPickerView(quantityType: $quantityType, selectedMassUnit: $massUnit, selectedVolumeUnit: $volumeUnit)
                 }
             }
-            .navigationTitle("Add New Item")
+            .navigationInlinify(title: Constants.NavigationTitle.addItem)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") { presentationMode.wrappedValue.dismiss() }
+                ToolbarItem(placement: .bottomBar) {
+                    Button { presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "x.circle.fill")
+                    }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
                         saveItem()
                         presentationMode.wrappedValue.dismiss()
-                    }.disabled(itemName.isEmpty || quantityValue <= 0)
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                    }
+                    .disabled(itemName.isEmpty || value <= 0)
                 }
             }
         }
+        .foregroundColor(Colors.scoopRed)
     }
     
     private func saveItem() {
-        let quantity: Quantity = selectedQuantityType == .mass
-        ? .mass(Mass(value: quantityValue, unit: selectedMassUnit))
-        : .volume(Volume(value: quantityValue, unit: selectedVolumeUnit))
+        let quantity: Quantity = quantityType == .mass
+        ? .mass(Mass(value: value, unit: massUnit))
+        : .volume(Volume(value: value, unit: volumeUnit))
         
         let newItem = GroceryItem(name: itemName, quantity: quantity)
-        viewModel.add(newItem)
+        vm.add(newItem)
     }
 }
 
+#Preview {
+    AddItemView()
+}

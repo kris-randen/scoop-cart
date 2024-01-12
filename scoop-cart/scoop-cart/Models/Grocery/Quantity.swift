@@ -17,13 +17,13 @@ enum Quantity: Codable {
         case type, value, unit
     }
     
-    enum QuantityType: String, Codable {
+    enum Kind: String, Codable {
         case mass, volume
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let type = try container.decode(QuantityType.self, forKey: .type)
+        let type = try container.decode(Kind.self, forKey: .type)
         
         switch type {
         case .mass:
@@ -39,10 +39,10 @@ enum Quantity: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
         case .mass(let mass):
-            try container.encode(QuantityType.mass, forKey: .type)
+            try container.encode(Kind.mass, forKey: .type)
             try container.encode(mass, forKey: .value)
         case .volume(let volume):
-            try container.encode(QuantityType.volume, forKey: .type)
+            try container.encode(Kind.volume, forKey: .type)
             try container.encode(volume, forKey: .value)
         }
     }

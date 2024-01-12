@@ -11,30 +11,39 @@ struct GroceryListView: View {
     @StateObject var vm = GroceryListViewModel()
     @State private var showingAddItemView = false
     
+    init() {
+        UINavigationBar.appearance().titleTextAttributes = [.font: UIFont(name: "Avenir Next Bold", size: 20)!, .foregroundColor: UIColor(Colors.scoopRed)]
+    }
+    
     var body: some View {
         NavigationView {
             List {
                 ForEach(vm.items) { item in
-                    HStack {
-                        Text(item.name)
-                        Spacer()
-                        Text(item.quantityDescription)
-                    }
+                    GroceryListCellView(item: item.name, quantity: item.quantityDescription, unit: item.unitDescription)
+                        .listRowInsets(EdgeInsets(top: -5, leading: 0, bottom: 0, trailing: 0))
+                        .listRowBackground(Color.clear)
                 }
                 .onDelete(perform: deleteItems)
             }
-            .navigationTitle("Grocery List")
+            .navigationInlinify(title: Constants.NavigationTitle.groceryList)
             .sheet(isPresented: $showingAddItemView) {
-                AddItemView(viewModel: vm)
+                AddGroceryItemView(vm: vm)
             }
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: add) {
-                        Label("Add Item", systemImage: "plus")
+                ToolbarItem(placement: .bottomBar) {
+                    HStack {
+                        Spacer()
+                        Button(action: add) {
+                            Image(systemName: "mic.fill.badge.plus")
+                                .font(.title)
+                        }
+                        .foregroundColor(Colors.scoopRed)
+                        Spacer()
                     }
                 }
             }
         }
+        .foregroundColor(Colors.scoopRed)
     }
     
     private func deleteItems(at offsets: IndexSet) {
@@ -51,9 +60,18 @@ extension GroceryItem {
     var quantityDescription: String {
         switch quantity {
         case .mass(let mass):
-            return "\(mass.value) \(mass.unit.rawValue)"
+            return "\(mass.value)"
         case .volume(let volume):
-            return "\(volume.value) \(volume.unit.rawValue)"
+            return "\(volume.value)"
+        }
+    }
+    
+    var unitDescription: String {
+        switch quantity {
+        case .mass(let mass):
+            return "\(mass.unit.rawValue)"
+        case .volume(let volume):
+            return "\(volume.unit.rawValue)"
         }
     }
 }

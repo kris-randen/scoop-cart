@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct QuantityPickerView: View {
-    @Binding var quantityType: Quantity.QuantityType
+    @Binding var quantityType: Quantity.Kind
     @Binding var selectedMassUnit: Mass.Unit
     @Binding var selectedVolumeUnit: Volume.Unit
     
