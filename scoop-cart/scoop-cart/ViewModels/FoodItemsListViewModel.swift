@@ -19,9 +19,9 @@ class FoodItemsListViewModel: ObservableObject {
     private var fdcService = FDCFoodServiceNew()
     
     //MARK: - Methods for fetching and updating data
-    func fetchNutritionInfo(for foodItem: String) async {
+    func fetchNutritionInfo(for foodItem: String, at serving: Serving = Serving()) async {
         isLoading = true
         defer { isLoading = false } ///Ensure loading is set to false when done
-        profile = await fdcService.fetchNutritionInfo(for: foodItem)
+        profile = await fdcService.fetchNutritionInfo(for: foodItem, at: serving)
     }
 }

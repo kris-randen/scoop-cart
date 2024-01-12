@@ -28,6 +28,9 @@ struct Serving {
         }
     }
     
+    var value: Double = 100
+    var unit: Units.Mass = .gm
+    
     struct Volume: ConvertibleMeasure {
         typealias Unit = Units.Volume
         var unit: Unit = .ml
@@ -40,16 +43,23 @@ struct Serving {
         var value: Double = 100
     }
     
-    static var mapper: [Units.Kind : any ConvertibleMeasure] {
+    static func factor(from lhs: Serving, to rhs: Serving) -> Double {
+        (rhs.value / lhs.value) * (rhs.unit.conversion(to: lhs.unit))
+    }
+    
+    func factor(to rhs: Serving) -> Double {
+        Serving.factor(from: self, to: rhs)
+    }
+    
+    static var mapper: [Units.Kind : Serving] {
         [
-            .mass: Mass(),
-            .volume: Volume()
+            .mass: Serving()
         ]
     }
     
-    static func get(from food: FDCFood) -> any ConvertibleMeasure {
+    static func get(from food: FDCFood) -> Serving {
         print("The food is:\n\(food)")
-        guard food.servingSizeUnit != nil else { return Mass() }
+        guard food.servingSizeUnit != nil else { return Serving() }
         var serving = mapper[Units.Kind.get(from: food.servingSizeUnit!.lowercased())!]!
         serving.value = food.servingSize!
         return serving

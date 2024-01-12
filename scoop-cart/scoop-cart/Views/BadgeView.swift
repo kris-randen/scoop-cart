@@ -21,7 +21,7 @@ struct BadgeView: View {
                 .foregroundStyle(badge.iconColors.foreground, badge.iconColors.background)
                 .font(badge.iconFont)
         }
-//        .frame(width: Constants.Width/3)
+        .frame(width: Constants.Width/3)
         .shadowify()
     }
 }

@@ -31,7 +31,6 @@ struct GroceryListView: View {
                     }
                     .onDelete(perform: deleteItems)
                 }
-                .navigationInlinify(title: Constants.NavigationTitle.groceryList)
                 .sheet(isPresented: $showingAddItemView) {
                     AddGroceryItemView(vm: gvm)
                 }
@@ -51,7 +50,9 @@ struct GroceryListView: View {
                 Button {
                     Task {
                         fvm.profile = nil
-                        await fvm.fetchNutritionInfo(for: gvm.items[0].name)
+                        let groceryItem = gvm.items[0]
+                        let servingSize = Serving(value: groceryItem.quantity, unit: groceryItem.unit)
+                        await fvm.fetchNutritionInfo(for: groceryItem.name, at: servingSize)
                         navigate = true
                     }
                 } label: {
@@ -61,7 +62,9 @@ struct GroceryListView: View {
                     NavigationLink("", destination: HorizontalChartView(kind: $kind, serving: $serving, profile: profile), isActive: $navigate)
                 }
             }
+            .navigationInlinify(title: Constants.NavigationTitle.groceryList)
         }
+        .ignoresSafeArea(.all, edges: .all)
         .accentColor(Colors.scoopRed)
     }
     

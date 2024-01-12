@@ -20,7 +20,7 @@ struct ServingToggleView: View {
             } label: {
                 BadgeView(badge: Badge(kind: .serving(kind: serving)))
             }
-            .frame(width: 30)
+            .frame(width: Constants.Width / 10)
             .padding(.trailing)
         }
         .textFieldify(heightScaling: Dimensions.HeightScaling.textField)

@@ -25,11 +25,12 @@ struct FDCFoodServiceNew {
         self.urlPrefix = urlPrefix
     }
     
-    func fetchNutritionInfo(for foodItem: String) async -> NutrientProfile {
+    func fetchNutritionInfo(for foodItem: String, at serving: Serving = Serving()) async -> NutrientProfile {
         if let cached = await cacheActor.retrieve(foodItem) {
             return cached
         }
-        let profile = await fetchFromFDC(foodItem)
+        var profile: NutrientProfile = await fetchFromFDC(foodItem)
+        profile = profile.scaledTo(servingSize: serving)
         await cacheActor.save(profile, for: foodItem)
         return profile
     }

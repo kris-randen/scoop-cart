@@ -10,7 +10,7 @@ import Foundation
 actor CacheActor {
     private var cache = [String: NutrientProfile]()
     
-    func retrieve(_ foodItem: String) -> NutrientProfile? {
+    func retrieve(_ foodItem: String, at serving: Serving = Serving()) -> NutrientProfile? {
         cache[foodItem]
     }
     

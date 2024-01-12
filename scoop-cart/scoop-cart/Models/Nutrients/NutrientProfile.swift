@@ -20,7 +20,7 @@ protocol NutrientProfileable: Multipliable {
     var description: String { get }
     var type: NutrientValueType { get }
     var intakes: NutrientIntakes { get set }
-    var serving: any ConvertibleMeasure { get }
+    var serving: Serving { get set }
     
     var nqi: Double { get }
 }
@@ -42,7 +42,8 @@ extension NutrientProfileable {
     }
     
     mutating func multiply(_ factor: Double) {
-        self.intakes = factor * self.intakes
+        serving = Serving(value: serving.value * factor, unit: serving.unit)
+        intakes = factor * intakes
     }
     
     var food: String {
@@ -193,14 +194,14 @@ extension NutrientProfileable {
 
 
 protocol ServeableNutrientProfile: NutrientProfileable {
-    var serving: any ConvertibleMeasure { get }
+    var serving: Serving { get set }
 }
 
 struct NutrientProfile: NutrientProfileable, NQIconvertible, Scalable, DailyValueScaleable {
     var intakes: NutrientIntakes
     var description: String
     var type: NutrientValueType
-    var serving: any ConvertibleMeasure = Serving.Mass(unit: .gm, value: 100)
+    var serving: Serving = Serving()
     var energy = Energy(unit: .kcal, value: 0)
 }
 
@@ -217,8 +218,13 @@ extension NutrientProfile {
         return self.convertedToNQI(for: self.energy)
     }
     
+    func scaledTo(servingSize: Serving) -> Self {
+        let factor = serving.factor(to: servingSize)
+        return scaledTo(factor: factor)
+    }
+    
     func scaledTo(factor: Double) -> Self {
-        return self * factor
+        self * factor
     }
     
     func scaledByDV() -> Self {
@@ -275,7 +281,7 @@ extension Dictionary: Multipliable where Value: Multipliable {
 
 struct NutrientProfileServed: ServeableNutrientProfile {
     var intakes: NutrientIntakes
-    var serving: any ConvertibleMeasure
+    var serving: Serving
     var description: String
     var type: NutrientValueType
 }

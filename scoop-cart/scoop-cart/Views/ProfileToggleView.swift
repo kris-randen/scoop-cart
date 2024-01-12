@@ -20,7 +20,7 @@ struct ProfileToggleView: View {
             } label: {
                 BadgeView(badge: Badge(kind: .kind(kind: kind)))
             }
-            .frame(width: 30)
+            .frame(width: Constants.Width / 10)
             .padding(.trailing)
         }
         .textFieldify(heightScaling: Dimensions.HeightScaling.textField)

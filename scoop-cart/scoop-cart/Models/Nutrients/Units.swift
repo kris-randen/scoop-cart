@@ -20,7 +20,8 @@ protocol ExponentInterconvertible: Convertible {
 
 extension ExponentInterconvertible {
     func conversion(to: Self) -> Double {
-        pow(10, Double(conversionExponent(to: to)))
+        print("conversion exponent from \(self) to \(to) = \(conversionExponent(to: to))")
+        return pow(10, Double(conversionExponent(to: to)))
     }
 }
 
