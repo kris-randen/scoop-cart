@@ -11,10 +11,11 @@ struct GroceryListView: View {
     @StateObject var gvm = GroceryListViewModel()
     @StateObject var nvm = NutritionalDataViewModel()
     
+    @State private var consumedOver: Double = 0
     @State private var showingAddItemView = false
     @State private var navigate = false
     @State private var kind: Nutrient.Kind = .vitamin
-    @State private var serving: Serving.Kind = .kcal2000
+    @State private var serving: Serving.Kind = .list
     
     
     init() {
@@ -48,15 +49,26 @@ struct GroceryListView: View {
                         }
                     }
                 }
+                Text("Expected Consumption Period (in **Days**)")
+                    .textFieldify(withHeightScaling: Dimensions.HeightScaling.textField)
+                    .font(Fonts.signInTextField)
+                    .borderify(shape: Shapes.textField, color: Colors.scoopYellow)
+                    .clippify(shape: Shapes.textField)
+                    .shadowify()
+                    .foregroundColor(Colors.scoopRed)
+                ScoopNumField(value: $consumedOver)
+                    .frame(width: Constants.Width / 8)
+                    .multilineTextAlignment(.center)
+                    .fontWeight(.black)
                 Button {
                     Task {
-//                        nvm.aggregatedProfile = nil
-                        await nvm.fetchNutritionalInfo(for: gvm.items)
+                        await nvm.fetchNutritionalInfo(for: gvm.items, consumedOver: consumedOver)
                         navigate = true
                     }
                 } label: {
                     ScoopButtonLabelView()
                 }
+                .padding(.horizontal)
                 if let profile = nvm.aggregatedProfile {
                     NavigationLink("", destination: HorizontalChartView(kind: $kind, serving: $serving, profile: profile), isActive: $navigate)
                 }

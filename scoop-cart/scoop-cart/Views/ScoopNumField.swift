@@ -19,6 +19,7 @@ struct ScoopNumField: View {
                     .borderify(shape: shape, color: Colors.scoopYellow)
                     .clippify(shape: shape)
                     .shadowify()
+                    .foregroundColor(Colors.scoopRed)
     }
 }
 

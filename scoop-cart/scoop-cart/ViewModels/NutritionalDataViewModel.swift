@@ -19,13 +19,13 @@ class NutritionalDataViewModel: ObservableObject {
         self.fdcService = fdcService
     }
     
-    func fetchNutritionalInfo(for items: GroceryItems) async {
+    func fetchNutritionalInfo(for items: GroceryItems, consumedOver: Double = 0) async {
         isLoading = true
         error = nil
         
         do {
             let data = try await fetchAndAggregateData(for: items)
-            aggregatedProfile = data
+            aggregatedProfile = data * (1 / consumedOver)
         } catch {
             self.error = error
         }

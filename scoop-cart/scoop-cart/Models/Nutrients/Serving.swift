@@ -9,21 +9,24 @@ import Foundation
 
 struct Serving {
     enum Kind {
-        case gm100, kcal2000
+        case gm100, kcal2000, list
         
         var name: String {
             switch self {
             case .gm100: "100 gm"
             case .kcal2000: "2000 Cal"
+            case .list: "List"
             }
         }
         
         func toggle() -> Kind {
             switch self {
-            case .gm100: 
-                    return .kcal2000
-            case .kcal2000: 
-                    return .gm100
+            case .gm100:
+                return .kcal2000
+            case .kcal2000:
+                return .gm100
+            case .list:
+                return .list
             }
         }
     }
