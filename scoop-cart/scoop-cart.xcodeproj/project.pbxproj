@@ -69,6 +69,7 @@
 		EEB8E3B92B4D63A000CA8736 /* RoundedRectBottomRightCap.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB8E3A92B4D639F00CA8736 /* RoundedRectBottomRightCap.swift */; };
 		EEB8E3BA2B4D63A000CA8736 /* RoundedRectCaps.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB8E3AA2B4D639F00CA8736 /* RoundedRectCaps.swift */; };
 		EEB8E3BB2B4D63A000CA8736 /* FlexibleRoundedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB8E3AB2B4D63A000CA8736 /* FlexibleRoundedLine.swift */; };
+		EEB927D12B52852F00AB6670 /* NutritionalDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB927D02B52852F00AB6670 /* NutritionalDataViewModel.swift */; };
 		EEBA012B2B4C7A9D00A27D81 /* scoop_cartApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBA012A2B4C7A9D00A27D81 /* scoop_cartApp.swift */; };
 		EEBA012D2B4C7A9D00A27D81 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBA012C2B4C7A9D00A27D81 /* ContentView.swift */; };
 		EEBA012F2B4C7A9F00A27D81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEBA012E2B4C7A9F00A27D81 /* Assets.xcassets */; };
@@ -182,6 +183,7 @@
 		EEB8E3A92B4D639F00CA8736 /* RoundedRectBottomRightCap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedRectBottomRightCap.swift; sourceTree = "<group>"; };
 		EEB8E3AA2B4D639F00CA8736 /* RoundedRectCaps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedRectCaps.swift; sourceTree = "<group>"; };
 		EEB8E3AB2B4D63A000CA8736 /* FlexibleRoundedLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlexibleRoundedLine.swift; sourceTree = "<group>"; };
+		EEB927D02B52852F00AB6670 /* NutritionalDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionalDataViewModel.swift; sourceTree = "<group>"; };
 		EEBA01272B4C7A9D00A27D81 /* scoop-cart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "scoop-cart.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEBA012A2B4C7A9D00A27D81 /* scoop_cartApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = scoop_cartApp.swift; sourceTree = "<group>"; };
 		EEBA012C2B4C7A9D00A27D81 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -374,6 +376,7 @@
 			children = (
 				EEC971F82B4DC74E003D276C /* FoodItemsListViewModel.swift */,
 				EEBA015F2B4C7F8D00A27D81 /* GroceryListViewModel.swift */,
+				EEB927D02B52852F00AB6670 /* NutritionalDataViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -622,6 +625,7 @@
 				EEB8E3942B4D62A900CA8736 /* FDCfoodNutrient.swift in Sources */,
 				EEB8E3AE2B4D63A000CA8736 /* RoundedRectBottomLeftCap.swift in Sources */,
 				EEB8E3732B4D609000CA8736 /* DictionariesSetOperations.swift in Sources */,
+				EEB927D12B52852F00AB6670 /* NutritionalDataViewModel.swift in Sources */,
 				EEC971F72B4DC722003D276C /* BadgeView.swift in Sources */,
 				EEB8E3B32B4D63A000CA8736 /* LineCaps.swift in Sources */,
 				EEB8E3B72B4D63A000CA8736 /* Line.swift in Sources */,

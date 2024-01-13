@@ -9,7 +9,8 @@ import SwiftUI
 
 struct GroceryListView: View {
     @StateObject var gvm = GroceryListViewModel()
-    @StateObject var fvm = FoodItemsListViewModel()
+    @StateObject var nvm = NutritionalDataViewModel()
+    
     @State private var showingAddItemView = false
     @State private var navigate = false
     @State private var kind: Nutrient.Kind = .vitamin
@@ -49,17 +50,19 @@ struct GroceryListView: View {
                 }
                 Button {
                     Task {
-                        fvm.profile = nil
-                        let groceryItem = gvm.items[0]
-                        let servingSize = Serving(value: groceryItem.quantity, unit: groceryItem.unit)
-                        await fvm.fetchNutritionInfo(for: groceryItem.name, at: servingSize)
+//                        nvm.aggregatedProfile = nil
+                        await nvm.fetchNutritionalInfo(for: gvm.items)
                         navigate = true
                     }
                 } label: {
                     ScoopButtonLabelView()
                 }
-                if let profile = fvm.profile {
+                if let profile = nvm.aggregatedProfile {
                     NavigationLink("", destination: HorizontalChartView(kind: $kind, serving: $serving, profile: profile), isActive: $navigate)
+                }
+                
+                if nvm.isLoading {
+                    
                 }
             }
             .navigationInlinify(title: Constants.NavigationTitle.groceryList)

@@ -16,13 +16,13 @@ import Foundation
 import Collections
 import OrderedCollections
 
-protocol NutrientProfileable: Multipliable {
+protocol NutrientProfileable: Summable, Multipliable {
     var description: String { get }
     var type: NutrientValueType { get }
     var intakes: NutrientIntakes { get set }
     var serving: Serving { get set }
-    
     var nqi: Double { get }
+    var energy: Energy { get set }
 }
 
 extension NutrientProfileable {
@@ -32,13 +32,14 @@ extension NutrientProfileable {
         nqi(for: mineralIntakes)
     }
     
-    var energy: Double {
-        let macros = intakes.intakes[.macro] as! MacroIntakes
-        return macros.intakes[.energy]!
+    var nqiFactor: Double {
+        Constants.DRI.energy / energy.value
     }
     
-    var nqiFactor: Double {
-        Constants.DRI.energy / energy
+    mutating func add(_ other: Self) {
+        self.intakes = self.intakes + other.intakes
+        /// Add energies too!!
+        self.energy = self.energy + other.energy
     }
     
     mutating func multiply(_ factor: Double) {
@@ -199,10 +200,27 @@ protocol ServeableNutrientProfile: NutrientProfileable {
 
 struct NutrientProfile: NutrientProfileable, NQIconvertible, Scalable, DailyValueScaleable {
     var intakes: NutrientIntakes
-    var description: String
-    var type: NutrientValueType
+    var description: String = "Grocery List"
+    var type: NutrientValueType = .value
     var serving: Serving = Serving()
     var energy = Energy(unit: .kcal, value: 0)
+    
+    init() {
+        self.intakes = NutrientIntakes()
+    }
+    
+    init(
+        intakes: NutrientIntakes = NutrientIntakes(),
+        description: String = "",
+        type: NutrientValueType = .value,
+        serving: Serving = Serving(),
+        energy: Energy = Energy(unit: .kcal, value: 0)) {
+            self.intakes = intakes
+            self.description = description
+            self.type = type
+            self.serving = serving
+            self.energy = energy
+        }
 }
 
 extension NutrientProfile {
@@ -245,6 +263,7 @@ protocol Multipliable {
     static func *(lhs: Double, rhs: Self) -> Self
     static func *(lhs: Self, rhs: Double) -> Self
 }
+
 extension Multipliable {
     func multiplied(by factor: Double) -> Self {
         var result = self
@@ -256,6 +275,24 @@ extension Multipliable {
     }
     static func *(lhs: Self, rhs: Double) -> Self {
         lhs.multiplied(by: rhs)
+    }
+}
+
+protocol Summable {
+    mutating func add(_ other: Self)
+    func sum(with other: Self) -> Self
+    static func +(lhs: Self, rhs: Self) -> Self
+}
+
+extension Summable {
+    func sum(with other: Self) -> Self {
+        var result = self
+        result.add(other)
+        return result
+    }
+    
+    static func +(lhs: Self, rhs: Self) -> Self {
+        lhs.sum(with: rhs)
     }
 }
 
@@ -284,6 +321,7 @@ struct NutrientProfileServed: ServeableNutrientProfile {
     var serving: Serving
     var description: String
     var type: NutrientValueType
+    var energy: Energy = Energy(unit: .kcal, value: 0)
 }
 
 

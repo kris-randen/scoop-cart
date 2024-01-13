@@ -33,6 +33,14 @@ extension OrderedDictionary where Key: Comparable {
         }
 }
 
+extension OrderedDictionary: Summable {
+    mutating func add(_ other: OrderedCollections.OrderedDictionary<Key, Value>) {
+        
+    }
+    
+    
+}
+
 extension Dictionary {
     func mapD<NewKey, NewValue>(_ transform: ((key: Key, value: Value)) -> (NewKey, NewValue)) -> [NewKey: NewValue] {
             return Dictionary<NewKey, NewValue>(uniqueKeysWithValues: self.map(transform))

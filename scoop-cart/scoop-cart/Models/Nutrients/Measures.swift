@@ -44,9 +44,15 @@ extension ConvertibleMeasure {
 //    var value: Double
 //}
 
-struct Energy: ConvertibleMeasure {
+struct Energy: ConvertibleMeasure, Summable {
     typealias Unit = Units.Energy
     let unit: Units.Energy
     var value: Double
     static var dailyValue: Double = 2000
+}
+
+extension Energy {
+    mutating func add(_ other: Energy) {
+        self.value += other.conversion(to: unit)
+    }
 }

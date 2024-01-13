@@ -28,7 +28,7 @@ protocol Scalable {
     func scaledTo(factor: Double) -> Self
 }
 
-protocol Intakeable: Multipliable, NQIconvertible, Scalable, DailyValueScaleable {
+protocol Intakeable: Summable, Multipliable, NQIconvertible, Scalable, DailyValueScaleable {
     associatedtype NutrientKey: NutrientType
     typealias Intakes = OrderedDictionary<NutrientKey, Double>
     var intakes: Intakes { get set }
@@ -43,6 +43,12 @@ protocol Intakeable: Multipliable, NQIconvertible, Scalable, DailyValueScaleable
 }
 
 extension Intakeable {
+    mutating func add(_ other: Self) {
+        for (key, _) in intakes {
+            intakes[key] = intakes[key]! + (other.intakes[key] ?? 0)
+        }
+    }
+    
     mutating func multiply(_ factor: Double) {
         self.intakes = factor * self.intakes
     }
@@ -105,7 +111,7 @@ extension Intakeable {
     var negativeNQI: Double { negatives.nqi }
 }
 
-protocol Intakeables: Multipliable, NQIconvertible, Scalable, DailyValueScaleable {
+protocol Intakeables: Summable, Multipliable, NQIconvertible, Scalable, DailyValueScaleable {
     var intakes: OrderedDictionary<Nutrient.Kind, any Intakeable> { get set }
     var nqi: Double { get }
     
@@ -176,6 +182,27 @@ struct NutrientIntakes: Intakeables {
     
     typealias Intakes = OrderedDictionary<Nutrient.Kind, any Intakeable>
     var intakes: Intakes
+    
+    var macros: MacroIntakes {
+        intakes[.macro] as! MacroIntakes
+    }
+    
+    var vitamins: VitaminIntakes {
+        intakes[.vitamin] as! VitaminIntakes
+    }
+    
+    var minerals: MineralIntakes {
+        intakes[.mineral] as! MineralIntakes
+    }
+    
+    mutating func add(_ other: Self) {
+        let macroIntakes = macros + other.macros
+        let vitaminIntakes = vitamins + other.vitamins
+        let mineralIntakes = minerals + other.minerals
+        self.intakes[.macro] = macroIntakes
+        self.intakes[.vitamin] = vitaminIntakes
+        self.intakes[.mineral] = mineralIntakes
+    }
     
     mutating func multiply(_ factor: Double) {
         self.intakes = [

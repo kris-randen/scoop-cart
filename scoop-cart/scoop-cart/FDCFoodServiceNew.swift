@@ -27,7 +27,7 @@ struct FDCFoodServiceNew {
     
     func fetchNutritionInfo(for foodItem: String, at serving: Serving = Serving()) async -> NutrientProfile {
         if let cached = await cacheActor.retrieve(foodItem) {
-            return cached
+            return cached.scaledTo(servingSize: serving)
         }
         var profile: NutrientProfile = await fetchFromFDC(foodItem)
         profile = profile.scaledTo(servingSize: serving)
